@@ -7,10 +7,13 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 export const getSendAllContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
-  const data = await getAllContacts({ page, perPage });
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
+  const data = await getAllContacts({ page, perPage, sortBy, sortOrder });
 
   if (data.data.length === 0) {
     throw createHttpError(404, 'No contacts found');
