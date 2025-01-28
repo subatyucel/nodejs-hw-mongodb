@@ -2,10 +2,10 @@ const isString = (query) => {
   return typeof query === 'string';
 };
 
-const parseFavourite = (favourite) => {
-  if (!isString(favourite)) return;
+const parseFavourite = (isFavourite) => {
+  if (!isString(isFavourite)) return;
 
-  const parsedFavourite = favourite.toLowerCase() === 'true';
+  const parsedFavourite = isFavourite.toLowerCase() === 'true';
   return parsedFavourite;
 };
 
@@ -21,8 +21,8 @@ const parseType = (type) => {
 };
 
 export const parseFilterParams = (query) => {
-  const { type, favourite } = query;
-  const parsedFavourite = parseFavourite(favourite);
+  const { type, isFavourite } = query;
+  const parsedFavourite = parseFavourite(isFavourite);
   const parsedType = parseType(type);
 
   return {
