@@ -6,16 +6,27 @@ import {
   updateContact,
   deleteContact,
 } from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 export const getSendAllContacts = async (req, res) => {
-  const contacts = await getAllContacts();
-  if (!contacts) {
-    createHttpError(404, 'No contacts found');
+  const { page, perPage } = parsePaginationParams(req.query);
+  const data = await getAllContacts({ page, perPage });
+
+  if (data.data.length === 0) {
+    throw createHttpError(404, 'No contacts found');
   }
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: contacts,
+    data: {
+      data: data.data,
+      page: data.page,
+      perpage: data.perPage,
+      totalItems: data.totalItems,
+      totalPages: data.totalPages,
+      hasPrevioursPage: data.hasPreviousPage,
+      hasNextPage: data.hasNextPage,
+    },
   });
 };
 
