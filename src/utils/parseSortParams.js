@@ -1,7 +1,12 @@
 import { SORT_ORDER } from '../constants/index.js';
 
 const parseSortOrder = (sortOrder) => {
-  const isKnownOrder = [SORT_ORDER.ASC, SORT_ORDER.DESC].includes(sortOrder);
+  const isKnownOrder = [
+    SORT_ORDER.ASC,
+    SORT_ORDER.DESC,
+    SORT_ORDER.ASCENDING,
+    SORT_ORDER.DESCENDING,
+  ].includes(sortOrder);
   if (isKnownOrder) return sortOrder;
   return SORT_ORDER.ASC;
 };
