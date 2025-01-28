@@ -11,13 +11,13 @@ const PORT = Number(env('PORT', 3000));
 
 const app = express();
 export const setupServer = () => {
-  // app.use(
-  //   pino({
-  //     transport: {
-  //       target: 'pino-pretty',
-  //     },
-  //   }),
-  // );
+  app.use(
+    pino({
+      transport: {
+        target: 'pino-pretty',
+      },
+    }),
+  );
 
   app.use(cors());
   app.use(
