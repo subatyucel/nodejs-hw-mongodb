@@ -21,6 +21,7 @@ export const getSendAllContacts = async (req, res) => {
     sortBy,
     sortOrder,
     filter,
+    userId: req.user._id,
   });
 
   if (data.data.length === 0) {
@@ -43,9 +44,11 @@ export const getSendAllContacts = async (req, res) => {
 
 export const getSendContactById = async (req, res, next) => {
   const id = req.params.contactId;
-  const contact = await getContactsById(id);
+  const userId = req.user._id;
+  const contact = await getContactsById(id, userId);
+  console.log(typeof contact, contact);
   if (!contact) {
-    createHttpError(404, 'bulamadım baba');
+    return next(createHttpError(404, 'Contact not found'));
   }
 
   return res.status(200).json({
@@ -56,7 +59,8 @@ export const getSendContactById = async (req, res, next) => {
 };
 
 export const createSendContact = async (req, res, next) => {
-  const contact = await createContact(req.body);
+  const newUser = { ...req.body, userId: req.user._id };
+  const contact = await createContact(newUser);
 
   res.status(201).json({
     status: 201,
@@ -67,7 +71,8 @@ export const createSendContact = async (req, res, next) => {
 
 export const updateSendContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
+  const userId = req.user._id;
+  const result = await updateContact(contactId, userId, req.body);
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
@@ -83,7 +88,8 @@ export const updateSendContact = async (req, res, next) => {
 
 export const deleteSendContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await deleteContact(contactId);
+  const userId = req.user._id;
+  const contact = await deleteContact(contactId, userId);
 
   if (!contact) {
     next(createHttpError(404, 'Contact not found'));
