@@ -2,10 +2,11 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import { env } from './utils/env.js';
-import contactsRouter from './routers/contacts.js';
+import router from './routers/index.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { ctrlWrapper } from './utils/ctrlWrapper.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = Number(env('PORT', 3000));
 
@@ -25,7 +26,8 @@ export const setupServer = () => {
       type: ['application/json', 'application/vnd.api+json'],
     }),
   );
-  app.use(contactsRouter);
+  app.use(cookieParser());
+  app.use(router);
   app.use('*', ctrlWrapper(notFoundHandler));
   app.use(errorHandler);
 
