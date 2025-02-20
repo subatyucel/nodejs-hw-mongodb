@@ -86,6 +86,7 @@ export const updateSendContact = async (req, res, next) => {
   const photo = req.file;
   const userId = req.user._id;
   let photoUrl;
+
   if (photo) {
     if (env('ENABLE_CLOUDINARY') === 'true') {
       photoUrl = await saveFileToCloudinary(photo);
